@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Text Editor",
+  "version": "0.1.0",
+  "identifier": "software.krill.text-editor",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Text Editor",
+        "width": 900,
+        "height": 720,
+        "minWidth": 480,
+        "minHeight": 360,
+        "decorations": false,
+        "resizable": true,
+        "center": true,
+        "backgroundColor": "#FAFAFF"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "plugins": {
+    "cli": {
+      "description": "A minimal text editor for Linux",
+      "args": [
+        {
+          "name": "file",
+          "index": 1,
+          "takesValue": true,
+          "description": "Path to a text file to open"
+        }
+      ]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["deb", "appimage"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.png"
+    ],
+    "category": "Utility",
+    "shortDescription": "Text editor",
+    "longDescription": "A minimal, single-window text editor for Linux. Open a text file, edit it, save it. Quiet by design.",
+    "fileAssociations": [
+      {
+        "ext": ["txt", "log", "conf", "ini"],
+        "name": "Text Document",
+        "description": "Plain text document",
+        "mimeType": "text/plain",
+        "role": "Editor"
+      }
+    ],
+    "linux": {
+      "deb": {
+        "section": "editors",
+        "priority": "optional",
+        "desktopTemplate": "main.desktop"
+      },
+      "appimage": {
+        "bundleMediaFramework": false
+      }
+    }
+  }
+}

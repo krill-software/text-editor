@@ -1,0 +1,142 @@
+@font-face {
+  font-family: "Hasklig";
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+  src: url("/src/assets/fonts/Hasklig-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hasklig";
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+  src: url("/src/assets/fonts/Hasklig-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hasklig";
+  font-weight: 400;
+  font-style: italic;
+  font-display: block;
+  src: url("/src/assets/fonts/Hasklig-Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hasklig";
+  font-weight: 700;
+  font-style: italic;
+  font-display: block;
+  src: url("/src/assets/fonts/Hasklig-BoldItalic.woff2") format("woff2");
+}
+
+/* Text-editor app-specific tokens. The 5 named palette colors and
+ * Space-Cadet alpha rules come from @krill-software/desktop-ui. */
+:root {
+  --fm-mono: "Hasklig", "Source Code Pro", "JetBrains Mono", ui-monospace, monospace;
+
+  --fm-selection: rgba(221, 117, 150, 0.22); /* alpha-derived from --fm-accent */
+  --fm-status-bg: rgba(250, 250, 255, 0.85); /* alpha-derived from --fm-bg */
+
+  --fm-font-size: 14px;
+  --fm-line-height: 1.6;
+  --fm-column: 90ch;
+  --fm-pad-y: clamp(24px, 4vh, 56px);
+}
+
+html, body {
+  font-family: var(--fm-mono);
+  font-size: var(--fm-font-size);
+  line-height: var(--fm-line-height);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "calt" 1, "liga" 1;
+  overscroll-behavior: none;
+}
+
+body {
+  cursor: default;
+}
+
+#viewport {
+  display: flex;
+  flex-direction: column;
+}
+
+#editor-root {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cm-editor {
+  height: 100%;
+  background: transparent;
+  color: var(--fm-text);
+  font-family: var(--fm-mono);
+  font-size: var(--fm-font-size);
+  line-height: var(--fm-line-height);
+  outline: none;
+}
+
+.cm-editor.cm-focused {
+  outline: none;
+}
+
+.cm-editor .cm-scroller {
+  font-family: var(--fm-mono);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: var(--fm-pad-y);
+  padding-bottom: var(--fm-pad-y);
+  padding-inline: max(24px, calc((100% - var(--fm-column)) / 2));
+}
+
+.cm-editor .cm-content {
+  caret-color: var(--fm-accent);
+  color: var(--fm-text);
+  padding: 0;
+  max-width: none;
+}
+
+.cm-editor .cm-line {
+  padding: 0;
+}
+
+.cm-cursor {
+  border-left-color: var(--fm-accent);
+  border-left-width: 2px;
+}
+
+.cm-selectionBackground,
+.cm-content ::selection,
+.cm-line ::selection {
+  background: var(--fm-selection) !important;
+}
+
+.cm-activeLine,
+.cm-editor .cm-activeLine,
+.cm-editor .cm-activeLineGutter {
+  background: transparent;
+}
+
+.cm-editor .cm-gutters {
+  background: transparent;
+  border-right: 1px solid var(--fm-rule);
+  color: var(--fm-muted);
+}
+
+.cm-editor .cm-lineNumbers .cm-gutterElement {
+  padding: 0 0.6em 0 0.4em;
+  font-variant-numeric: tabular-nums;
+}
+
+#status-line {
+  font-family: var(--fm-mono);
+  font-size: 12px;
+  letter-spacing: 0.01em;
+}
+
+#status-words,
+#status-lines {
+  font-variant-numeric: tabular-nums;
+}

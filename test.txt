@@ -1,0 +1,11 @@
+A short text fixture for the editor in dev mode.
+
+Lines are plain. No formatting, no syntax.
+Just words, paragraphs, and the occasional list:
+
+  - open a file
+  - edit it
+  - save it
+  - close the window
+
+That's the whole app.
