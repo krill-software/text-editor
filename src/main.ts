@@ -92,11 +92,8 @@ function updateTitle() {
 
 function updateStatus(contents: string) {
   const wordsEl = document.getElementById("status-words")!;
-  const linesEl = document.getElementById("status-lines")!;
   const words = contents.trim() ? contents.trim().split(/\s+/).length : 0;
-  const lines = contents ? contents.split("\n").length : 0;
   wordsEl.textContent = `${words.toLocaleString()} ${words === 1 ? "word" : "words"}`;
-  linesEl.textContent = `${lines.toLocaleString()} ${lines === 1 ? "line" : "lines"}`;
 }
 
 function onDocChange(contents: string) {
@@ -237,10 +234,6 @@ function initChrome() {
   const wordsSpan = document.createElement("span");
   wordsSpan.id = "status-words";
   chrome.statusState!.appendChild(wordsSpan);
-
-  const linesSpan = document.createElement("span");
-  linesSpan.id = "status-lines";
-  chrome.statusState!.appendChild(linesSpan);
 
   // Build the actual editor inside #editor-root.
   editor = createEditor(editorRoot, "", onDocChange);

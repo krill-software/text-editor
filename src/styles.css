@@ -37,8 +37,8 @@
 
   --fm-font-size: 14px;
   --fm-line-height: 1.6;
-  --fm-column: 90ch;
   --fm-pad-y: clamp(24px, 4vh, 56px);
+  --fm-pad-x: 24px;
 }
 
 html, body {
@@ -88,7 +88,29 @@ body {
   overflow-x: hidden;
   padding-top: var(--fm-pad-y);
   padding-bottom: var(--fm-pad-y);
-  padding-inline: max(24px, calc((100% - var(--fm-column)) / 2));
+  padding-right: var(--fm-pad-x);
+}
+
+.cm-editor .cm-gutters {
+  background: transparent;
+  border-right: none;
+  user-select: none;
+}
+
+.cm-editor .cm-lineNumbers {
+  font-family: var(--fm-mono);
+  color: rgba(135, 132, 114, 0.55); /* Artichoke at low alpha */
+}
+
+.cm-editor .cm-lineNumbers .cm-gutterElement {
+  padding: 0 1em 0 var(--fm-pad-x);
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+}
+
+.cm-editor .cm-activeLineGutter {
+  background: transparent;
+  color: var(--fm-accent);
 }
 
 .cm-editor .cm-content {
@@ -119,24 +141,12 @@ body {
   background: transparent;
 }
 
-.cm-editor .cm-gutters {
-  background: transparent;
-  border-right: 1px solid var(--fm-rule);
-  color: var(--fm-muted);
-}
-
-.cm-editor .cm-lineNumbers .cm-gutterElement {
-  padding: 0 0.6em 0 0.4em;
-  font-variant-numeric: tabular-nums;
-}
-
 #status-line {
   font-family: var(--fm-mono);
   font-size: 12px;
   letter-spacing: 0.01em;
 }
 
-#status-words,
-#status-lines {
+#status-words {
   font-variant-numeric: tabular-nums;
 }

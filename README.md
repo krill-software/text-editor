@@ -9,7 +9,7 @@ Built on Tauri 2 (Rust + system webview) with a TypeScript frontend and CodeMirr
 - **Open** — file-open dialog, CLI arg, `Ctrl+O`. Default format is `.txt`; file associations cover `.txt`, `.log`, `.conf`, `.ini`.
 - **Save / Save As** — `Ctrl+S` / `Ctrl+Shift+S`. Dirty state marked with a leading `•` in the titlebar.
 - **Soft-wrapped column** — long lines wrap; no horizontal scrollbar.
-- **Line numbers + find** — gutter line numbers and CodeMirror's `Ctrl+F` search.
+- **Line numbers + find** — subtle gutter line numbers and CodeMirror's `Ctrl+F` search.
 - **Adjustable font size** — `Ctrl+=` / `Ctrl+-` / `Ctrl+0`, persisted between sessions.
 - **Quiet by design** — no settings panel, no toolbar, no theme switcher.
 

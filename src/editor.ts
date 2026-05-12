@@ -1,7 +1,7 @@
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { search, searchKeymap } from "@codemirror/search";
 import { EditorState } from "@codemirror/state";
-import { EditorView, drawSelection, keymap, lineNumbers } from "@codemirror/view";
+import { EditorView, drawSelection, highlightActiveLineGutter, keymap, lineNumbers } from "@codemirror/view";
 
 export interface EditorHandle {
   view: EditorView;
@@ -20,6 +20,7 @@ export function createEditor(
       history(),
       drawSelection(),
       lineNumbers(),
+      highlightActiveLineGutter(),
       search({ top: true }),
       EditorView.lineWrapping,
       EditorState.tabSize.of(2),

@@ -42,7 +42,7 @@ A minimal plain-text editor for Linux. Open a text file, edit it, save it. Quiet
 ### Status line
 
 - Left half: empty (the filename lives in the titlebar).
-- Right half: word count and line count. Updates live.
+- Right half: word count. Updates live.
 
 ### Actions
 
