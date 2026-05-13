@@ -11,5 +11,6 @@ jobs:
     with:
       product-name: "Text Editor"
       example-file: "test.txt"
+    secrets: inherit
     permissions:
       contents: write
