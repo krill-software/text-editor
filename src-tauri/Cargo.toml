@@ -1,6 +1,6 @@
 [package]
 name = "krill-text-editor"
-version = "0.1.4"
+version = "0.1.5"
 description = "A minimal plain-text editor for Linux"
 authors = ["Filip"]
 edition = "2021"
