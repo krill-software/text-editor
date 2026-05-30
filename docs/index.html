@@ -1,361 +1,83 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Markdown — a calm markdown editor for Linux</title>
-    <meta
-      name="description"
-      content="A minimal, keyboard-driven markdown editor for Linux. Typography-first, source-only by default, beautiful to write in."
-    />
-    <meta property="og:title" content="Markdown — a calm markdown editor for Linux" />
-    <meta
-      property="og:description"
-      content="Typography-first, keyboard-driven, source-only markdown for Linux. Free and open source."
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://krill-software.github.io/chrome.css" />
-    <style>
-      /* App-specific styles only — shared chrome lives in
-       * https://krill-software.github.io/chrome.css. */
+---
+layout: app
+tagline: a calm plain-text editor for Linux
+description: A quiet plain-text editor for Linux. Line numbers, fast launch, one file per window — for config tweaks, scratch notes, and reading logs.
+og_description: A quiet, keyboard-friendly plain-text editor for Linux. Free and open source.
+eyebrow: A plain-text editor for Linux
+heading: "Open it, <em>edit</em> it, save it."
+lede: A quiet plain-text editor. Line numbers, fast launch, one file per window — for the config tweak, the scratch TODO, the log you just need to read.
+features_heading: Just an editor. A good one.
+features:
+  - tag: CodeMirror 6
+    title: A real editor surface
+    blurb: Line numbers, soft wrap at 90 columns, undo history, and a built-in search bar. Nothing past that.
+  - tag: Hasklig
+    title: Monospace, bundled
+    blurb: Ships its own typeface so files look the same everywhere. Ligatures on, 14px by default.
+  - tag: Ctrl = / − / 0
+    title: Size to taste
+    blurb: Scale the text from 12 to 28px. Your choice is remembered between sessions.
+  - tag: Ctrl + F
+    title: Find, no fuss
+    blurb: CodeMirror's search bar handles it. No find-and-replace dialog to learn.
+  - tag: One file, one window
+    title: No tabs, no workspace
+    blurb: Open a file, get a window. Close it when you're done. There's no project to manage.
+  - tag: Tauri · Rust
+    title: Native Linux
+    blurb: Small binary, real file associations, no Electron.
+principles_heading: A quiet editor.
+principles:
+  - strong: Not a code editor.
+    span: No syntax highlighting, no language modes.
+  - strong: No autosave.
+    span: Ctrl+S saves. Nothing writes your file behind your back.
+  - strong: One theme, locked.
+    span: A single light palette. The product has a look.
+  - strong: Stillness.
+    span: No toolbars, no popups, no recent-files menu.
+extension: ".txt"
+---
+<style>
+  .te-editor {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 24px 20px 30px;
+    color: var(--ink);
+  }
+  .te-gutter {
+    text-align: right;
+    color: var(--muted);
+    padding-right: 18px;
+    user-select: none;
+    white-space: pre;
+  }
+  .te-code { white-space: pre-wrap; margin: 0; }
+  .te-code .muted { color: var(--muted); }
+</style>
+<div class="pv-titlebar">
+  <span class="title">notes.txt<span class="dirty">•</span></span>
+  <span class="winbtns">─ ▢ ✕</span>
+</div>
+<div class="te-editor">
+  <div class="te-gutter">1
+2
+3
+4
+5
+6
+7</div>
+  <pre class="te-code"><span class="muted"># deploy checklist</span>
+- bump version in the three files
+- tag v0.1.6
+- push, promote the draft
 
-      /* Preview mock */
-      .preview-frame {
-        margin: 48px 0 0;
-        border: 1px solid var(--rule-strong);
-        border-radius: 12px;
-        overflow: hidden;
-        background: var(--bg);
-        box-shadow: 0 30px 60px -30px rgba(48, 52, 63, 0.18),
-          0 8px 20px -10px rgba(48, 52, 63, 0.08);
-      }
-
-      .titlebar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--rule);
-        font-family: var(--mono);
-        font-size: 12px;
-        color: var(--muted);
-      }
-
-      .titlebar .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--rule-strong);
-      }
-
-      .titlebar .dot.red {
-        background: #e8a5a5;
-      }
-      .titlebar .dot.amber {
-        background: #e8cfa5;
-      }
-      .titlebar .dot.green {
-        background: #a5d4b2;
-      }
-
-      .titlebar .title {
-        margin-left: 12px;
-        color: var(--ink);
-      }
-
-      .titlebar .dirty {
-        color: var(--accent);
-        margin-left: 4px;
-      }
-
-      .editor {
-        font-family: var(--mono);
-        font-size: 15px;
-        line-height: 1.7;
-        padding: 48px 8% 56px;
-        color: var(--ink);
-      }
-
-      .editor .col {
-        max-width: 62ch;
-        margin: 0 auto;
-      }
-
-      .editor .hash,
-      .editor .star,
-      .editor .bt,
-      .editor .gt,
-      .editor .br {
-        color: var(--muted);
-      }
-
-      .editor .h1 {
-        font-size: 22px;
-        margin: 0 0 18px;
-      }
-
-      .editor p {
-        margin: 0 0 18px;
-      }
-
-      .editor .code {
-        background: rgba(48, 52, 63, 0.04);
-        padding: 1px 6px;
-        border-radius: 4px;
-      }
-
-      .editor .caret {
-        display: inline-block;
-        width: 2px;
-        height: 1.1em;
-        background: var(--accent);
-        vertical-align: text-bottom;
-        animation: blink 1.1s steps(2, start) infinite;
-      }
-
-      @keyframes blink {
-        to {
-          visibility: hidden;
-        }
-      }
-
-      .statusbar {
-        border-top: 1px solid var(--rule);
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        font-family: var(--mono);
-        font-size: 12px;
-        color: var(--muted);
-      }
-
-      .keybinds {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px 32px;
-        font-family: var(--mono);
-        font-size: 13.5px;
-      }
-
-      .keybinds div {
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 0;
-        border-bottom: 1px dashed var(--rule);
-      }
-
-      .keybinds div span:last-child {
-        color: var(--muted);
-      }
-
-      kbd {
-        font-family: var(--mono);
-        font-size: 12px;
-        background: var(--bg);
-        border: 1px solid var(--rule-strong);
-        border-bottom-width: 2px;
-        border-radius: 4px;
-        padding: 1px 6px;
-        color: var(--ink);
-      }
-
-      @media (max-width: 720px) {
-        .editor {
-          padding: 32px 6% 40px;
-          font-size: 14px;
-        }
-        .keybinds {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <nav class="top">
-        <div class="brand">krill / markdown</div>
-        <ul>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#install">Install</a></li>
-          <li><a href="https://github.com/krill-software/text-editor">GitHub</a></li>
-        </ul>
-      </nav>
-
-      <header class="hero">
-        <div class="eyebrow">A markdown editor for Linux</div>
-        <h1>Write in <em>calm</em>, ship in markdown.</h1>
-        <p class="lede">
-          A minimal, keyboard-driven markdown editor. One file at a time.
-        </p>
-        <div class="cta">
-          <a
-            class="btn btn-primary"
-            href="https://github.com/krill-software/text-editor/releases/download/v0.1.5/Text.Editor_0.1.5_amd64.AppImage"
-          >
-            Download AppImage <span class="size">· 78 MB</span>
-          </a>
-          <a
-            class="btn btn-secondary"
-            href="https://github.com/krill-software/text-editor/releases/download/v0.1.5/Text.Editor_0.1.5_amd64.deb"
-          >
-            .deb for Ubuntu / Debian
-          </a>
-        </div>
-        <div class="meta">
-          <strong>v0.1.5</strong> · Linux x86_64 · Free &amp; open source
-        </div>
-
-        <div class="preview-frame">
-          <div class="titlebar">
-            <span class="dot red"></span>
-            <span class="dot amber"></span>
-            <span class="dot green"></span>
-            <span class="title">notes.md<span class="dirty">•</span></span>
-          </div>
-          <div class="editor">
-            <div class="col">
-              <div class="h1"><span class="hash"># </span>On writing well</div>
-              <p>
-                Good prose is clear before it is clever.
-                <span class="star">*</span>Delete<span class="star">*</span>
-                the middle of every sentence and see if it still stands.
-              </p>
-              <p>
-                Muted syntax means the <span class="star">**</span>text reads as text<span class="star">**</span> —
-                while <span class="code">`structure`</span> stays legible.<span class="caret"></span>
-              </p>
-            </div>
-          </div>
-          <div class="statusbar">
-            <span>notes.md · modified</span>
-            <span>182 words · UTF-8</span>
-          </div>
-        </div>
-      </header>
-
-      <section id="features">
-        <div class="section-label">Features</div>
-        <h2>Built to get out of your way.</h2>
-        <div class="features">
-          <div class="feature">
-            <div class="tag">Typography</div>
-            <h3>A page, not a text box</h3>
-            <p>Bundled monospace, centered column, muted syntax.</p>
-          </div>
-          <div class="feature">
-            <div class="tag">Ctrl+E</div>
-            <h3>Preview on demand</h3>
-            <p>Flip between source and rendered with one key.</p>
-          </div>
-          <div class="feature">
-            <div class="tag">Ctrl+Shift+F</div>
-            <h3>Paragraph focus</h3>
-            <p>Fade everything except the line you're in.</p>
-          </div>
-          <div class="feature">
-            <div class="tag">KaTeX · Mermaid</div>
-            <h3>Math &amp; diagrams</h3>
-            <p>Rendered in preview. Nothing to configure.</p>
-          </div>
-          <div class="feature">
-            <div class="tag">Ctrl+Shift+H / P</div>
-            <h3>Export HTML &amp; PDF</h3>
-            <p>Self-contained HTML. Print-ready A4 PDF.</p>
-          </div>
-          <div class="feature">
-            <div class="tag">Tauri · Rust</div>
-            <h3>Native Linux</h3>
-            <p>Small binary. Real file associations. No Electron.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="principles">
-        <div class="section-label">Principles</div>
-        <h2>A quiet page.</h2>
-        <div class="principles">
-          <div class="principle">
-            <strong>No chrome.</strong>
-            <span>No toolbars, ribbons, or sidebars.</span>
-          </div>
-          <div class="principle">
-            <strong>Keyboard first.</strong>
-            <span>Mouse supported, never required.</span>
-          </div>
-          <div class="principle">
-            <strong>One theme, locked.</strong>
-            <span>A single light palette. The product has a look.</span>
-          </div>
-          <div class="principle">
-            <strong>Stillness.</strong>
-            <span>No popups, no toasts, no modals.</span>
-          </div>
-        </div>
-      </section>
-
-      <section id="install">
-        <div class="section-label">Install</div>
-        <h2>Two files. One minute.</h2>
-        <div class="install">
-          <div class="install-copy">
-            <p>
-              Both formats ship the same binary and register
-              <span style="font-family: var(--mono); color: var(--ink)">.md</span>
-              as an associated file type.
-            </p>
-            <p style="margin-top: 20px">
-              Or build from source:
-              <span style="font-family: var(--mono); color: var(--ink)">pnpm install &amp;&amp; pnpm tauri build</span>.
-            </p>
-          </div>
-          <div class="install-box">
-            <h3>AppImage · any Linux</h3>
-<pre><span class="c"># download</span>
-curl -LO https://github.com/krill-software/text-editor/releases/download/v0.1.5/Text.Editor_0.1.5_amd64.AppImage
-
-<span class="c"># make executable &amp; run</span>
-chmod +x Text.Editor_0.1.5_amd64.AppImage
-./Text.Editor_0.1.5_amd64.AppImage</pre>
-
-            <hr />
-
-            <h3>Debian / Ubuntu</h3>
-<pre>sudo dpkg -i Text.Editor_0.1.5_amd64.deb
-krill-text-editor path/to/file.md</pre>
-          </div>
-        </div>
-      </section>
-
-      <section id="keys">
-        <div class="section-label">Keybindings</div>
-        <h2>All of it, from the keyboard.</h2>
-        <div class="keybinds">
-          <div><span>Toggle edit / preview</span><kbd>Ctrl E</kbd></div>
-          <div><span>Toggle focus mode</span><kbd>Ctrl Shift F</kbd></div>
-          <div><span>Save</span><kbd>Ctrl S</kbd></div>
-          <div><span>Save As</span><kbd>Ctrl Shift S</kbd></div>
-          <div><span>Open</span><kbd>Ctrl O</kbd></div>
-          <div><span>New buffer</span><kbd>Ctrl N</kbd></div>
-          <div><span>Font size ±</span><kbd>Ctrl = / -</kbd></div>
-          <div><span>Reset font size</span><kbd>Ctrl 0</kbd></div>
-          <div><span>Export HTML</span><kbd>Ctrl Shift H</kbd></div>
-          <div><span>Export PDF</span><kbd>Ctrl Shift P</kbd></div>
-          <div><span>Quit</span><kbd>Ctrl Q</kbd></div>
-          <div><span>Find / Replace</span><kbd>Ctrl F / H</kbd></div>
-        </div>
-      </section>
-
-      <footer>
-        <div>© krill · MIT licensed · No tracking, no accounts</div>
-        <div>
-          <a href="https://github.com/krill-software/text-editor">Source on GitHub</a>
-          &nbsp;·&nbsp;
-          <a href="https://github.com/krill-software/text-editor/issues">Report an issue</a>
-        </div>
-      </footer>
-    </div>
-  </body>
-</html>
+keep it boring. it just edits text.<span class="pv-caret"></span></pre>
+</div>
+<div class="pv-status">
+  <span>notes.txt</span>
+  <span>Ln 7 · Col 32 · UTF-8</span>
+</div>

@@ -1,0 +1,8 @@
+remote_theme: krill-software/docs-theme@v1
+plugins:
+  - jekyll-remote-theme
+
+title: Text Editor
+slug: text-editor
+brand: text-editor
+version: 0.1.5
