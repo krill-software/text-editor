@@ -41,12 +41,32 @@ extension: ".txt"
 <style>
   /* Mock chrome: tiny menu cluster + icon-button window controls,
    * mirroring the app's actual 40px titlebar. */
+  .pv-titlebar { position: relative; }
   .pv-titlebar .pv-menu { display: inline-flex; gap: 2px; align-items: center; }
   .pv-titlebar .pv-menu-item {
     padding: 2px 8px; border-radius: 4px;
     font-family: var(--mono); font-size: 12px; color: var(--ink);
   }
-  .pv-titlebar .pv-winbtns { display: inline-flex; gap: 2px; align-items: center; letter-spacing: 0; }
+  /* True center on the full bar regardless of menu/winbtn widths, so the
+   * filename sits exactly mid-titlebar. Pushes the .title out of the
+   * normal flex flow and onto the absolute layer. */
+  .pv-titlebar .title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+  /* Dirty bullet hangs to the right of the filename so the filename's
+   * own box stays the centered unit. */
+  .pv-titlebar .title .dirty {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 6px;
+  }
+  .pv-titlebar .pv-winbtns { display: inline-flex; gap: 2px; align-items: center; letter-spacing: 0; margin-left: auto; }
   .pv-titlebar .pv-winbtn {
     width: 22px; height: 22px;
     display: inline-flex; align-items: center; justify-content: center;
