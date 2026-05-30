@@ -13,6 +13,7 @@ export function createEditor(
   parent: HTMLElement,
   initial: string,
   onChange: (doc: string) => void,
+  onCursor?: (line: number, col: number) => void,
 ): EditorHandle {
   const state = EditorState.create({
     doc: initial,
@@ -27,6 +28,11 @@ export function createEditor(
       keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap]),
       EditorView.updateListener.of((u) => {
         if (u.docChanged) onChange(u.state.doc.toString());
+        if (onCursor && (u.docChanged || u.selectionSet)) {
+          const head = u.state.selection.main.head;
+          const line = u.state.doc.lineAt(head);
+          onCursor(line.number, head - line.from + 1);
+        }
       }),
     ],
   });

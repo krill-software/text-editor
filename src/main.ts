@@ -90,16 +90,9 @@ function updateTitle() {
   getCurrentWindow().setTitle(label).catch(() => {});
 }
 
-function updateStatus(contents: string) {
-  const wordsEl = document.getElementById("status-words")!;
-  const words = contents.trim() ? contents.trim().split(/\s+/).length : 0;
-  wordsEl.textContent = `${words.toLocaleString()} ${words === 1 ? "word" : "words"}`;
-}
-
 function onDocChange(contents: string) {
   docState.currentHash = hash(contents);
   updateTitle();
-  updateStatus(contents);
 }
 
 // ---- File open / save ------------------------------------------------
@@ -113,7 +106,6 @@ async function openPath(path: string): Promise<void> {
     docState.savedHash = hash(normalized);
     docState.currentHash = docState.savedHash;
     updateTitle();
-    updateStatus(normalized);
   } catch (e) {
     console.error("open failed:", e);
   }
@@ -176,7 +168,6 @@ async function newFile(): Promise<void> {
   docState.savedHash = hash("");
   docState.currentHash = docState.savedHash;
   updateTitle();
-  updateStatus("");
   editor.view.focus();
 }
 
@@ -230,15 +221,26 @@ function initChrome() {
   chrome.viewport.appendChild(editorRoot);
 
   // Status line: version on the left (per the convention in STYLE.md);
-  // word + line counts on the right. Filename lives in the titlebar;
-  // dirty rides body[data-dirty="true"].
+  // cursor position + encoding on the right. Filename lives in the
+  // titlebar; dirty rides body[data-dirty="true"].
   chrome.statusInfo!.textContent = `v${__APP_VERSION__}`;
-  const wordsSpan = document.createElement("span");
-  wordsSpan.id = "status-words";
-  chrome.statusState!.appendChild(wordsSpan);
+  const cursorSpan = document.createElement("span");
+  cursorSpan.id = "status-cursor";
+  cursorSpan.textContent = "Ln 1 · Col 1";
+  const sep = document.createElement("span");
+  sep.className = "sep";
+  sep.textContent = "·";
+  sep.style.margin = "0 8px";
+  sep.style.color = "var(--fm-rule-strong)";
+  const encSpan = document.createElement("span");
+  encSpan.id = "status-encoding";
+  encSpan.textContent = "UTF-8";
+  chrome.statusState!.append(cursorSpan, sep, encSpan);
 
   // Build the actual editor inside #editor-root.
-  editor = createEditor(editorRoot, "", onDocChange);
+  editor = createEditor(editorRoot, "", onDocChange, (line, col) => {
+    cursorSpan.textContent = `Ln ${line} · Col ${col}`;
+  });
 }
 
 // ---- Window persistence ---------------------------------------------
@@ -321,7 +323,6 @@ async function boot() {
   }
 
   updateTitle();
-  updateStatus(editor.getDoc());
   editor.view.focus();
 }
 
