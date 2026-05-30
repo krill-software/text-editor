@@ -39,6 +39,21 @@ principles:
 extension: ".txt"
 ---
 <style>
+  /* Mock chrome: tiny menu cluster + icon-button window controls,
+   * mirroring the app's actual 40px titlebar. */
+  .pv-titlebar .pv-menu { display: inline-flex; gap: 2px; align-items: center; }
+  .pv-titlebar .pv-menu-item {
+    padding: 2px 8px; border-radius: 4px;
+    font-family: var(--mono); font-size: 12px; color: var(--ink);
+  }
+  .pv-titlebar .pv-winbtns { display: inline-flex; gap: 2px; align-items: center; letter-spacing: 0; }
+  .pv-titlebar .pv-winbtn {
+    width: 22px; height: 22px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--muted); border-radius: 4px;
+  }
+  .pv-titlebar .pv-winbtn svg { width: 12px; height: 12px; }
+
   .te-editor {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -59,8 +74,18 @@ extension: ".txt"
   .te-code .muted { color: var(--muted); }
 </style>
 <div class="pv-titlebar">
+  <span class="pv-menu">
+    <span class="pv-menu-item">File</span>
+    <span class="pv-menu-item">Edit</span>
+    <span class="pv-menu-item">View</span>
+    <span class="pv-menu-item">Help</span>
+  </span>
   <span class="title">notes.txt<span class="dirty">•</span></span>
-  <span class="winbtns">─ ▢ ✕</span>
+  <span class="pv-winbtns">
+    <span class="pv-winbtn"><svg viewBox="0 0 12 12" fill="none"><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+    <span class="pv-winbtn"><svg viewBox="0 0 12 12" fill="none"><rect x="2.5" y="2.5" width="7" height="7" stroke="currentColor" stroke-width="1.2"/></svg></span>
+    <span class="pv-winbtn"><svg viewBox="0 0 12 12" fill="none"><line x1="3" y1="3" x2="9" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="9" y1="3" x2="3" y2="9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+  </span>
 </div>
 <div class="te-editor">
   <div class="te-gutter">1
@@ -78,6 +103,6 @@ extension: ".txt"
 keep it boring. it just edits text.<span class="pv-caret"></span></pre>
 </div>
 <div class="pv-status">
-  <span>notes.txt</span>
-  <span>Ln 7 · Col 32 · UTF-8</span>
+  <span>v0.1.6</span>
+  <span>Ln 6 · Col 36 · UTF-8</span>
 </div>

@@ -229,9 +229,10 @@ function initChrome() {
   editorRoot.id = "editor-root";
   chrome.viewport.appendChild(editorRoot);
 
-  // Status line: just word + line counts. Filename lives in the titlebar;
-  // dirty rides body[data-dirty="true"]. The info half stays empty since
-  // a plain text file has no natural identity metrics worth surfacing.
+  // Status line: version on the left (per the convention in STYLE.md);
+  // word + line counts on the right. Filename lives in the titlebar;
+  // dirty rides body[data-dirty="true"].
+  chrome.statusInfo!.textContent = `v${__APP_VERSION__}`;
   const wordsSpan = document.createElement("span");
   wordsSpan.id = "status-words";
   chrome.statusState!.appendChild(wordsSpan);
