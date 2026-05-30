@@ -150,3 +150,6 @@ body {
 #status-words {
   font-variant-numeric: tabular-nums;
 }
+
+/* Traffic-light titlebar now lives in @krill-software/desktop-ui
+ * v0.7.0+ — no local overrides needed. */
