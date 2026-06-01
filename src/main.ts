@@ -224,22 +224,17 @@ function initChrome() {
   // cursor position + encoding on the right. Filename lives in the
   // titlebar; dirty rides body[data-dirty="true"].
   chrome.statusInfo!.textContent = `v${__APP_VERSION__}`;
-  const cursorSpan = document.createElement("span");
-  cursorSpan.id = "status-cursor";
-  cursorSpan.textContent = "Ln 1 · Col 1";
-  const sep = document.createElement("span");
-  sep.className = "sep";
-  sep.textContent = "·";
-  sep.style.margin = "0 8px";
-  sep.style.color = "var(--fm-rule-strong)";
-  const encSpan = document.createElement("span");
-  encSpan.id = "status-encoding";
-  encSpan.textContent = "UTF-8";
-  chrome.statusState!.append(cursorSpan, sep, encSpan);
+  // One span carries the whole right-hand metadata string so the
+  // separators sit at consistent spacing (the .sep ::before pattern
+  // produces a wider gap when combined with status-state's flex gap).
+  const metaSpan = document.createElement("span");
+  metaSpan.id = "status-meta";
+  metaSpan.textContent = "Ln 1 · Col 1 · UTF-8";
+  chrome.statusState!.appendChild(metaSpan);
 
   // Build the actual editor inside #editor-root.
   editor = createEditor(editorRoot, "", onDocChange, (line, col) => {
-    cursorSpan.textContent = `Ln ${line} · Col ${col}`;
+    metaSpan.textContent = `Ln ${line} · Col ${col} · UTF-8`;
   });
 }
 

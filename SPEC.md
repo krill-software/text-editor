@@ -12,14 +12,14 @@ A minimal plain-text editor for Linux. Open a text file, edit it, save it. Quiet
 
 - No syntax highlighting, no language modes — this is not a code editor.
 - No multi-tab or multi-window session management (one file per window).
-- No find-and-replace UI beyond CodeMirror's built-in search bar.
+- No find / find-and-replace UI.
 - No autosave, no recent-files menu, no settings panel.
 - No Windows/macOS builds.
 
 ## Stack
 
 - **Shell:** Tauri 2 (Rust backend + system webview).
-- **Frontend:** TypeScript + Vite. Editor: CodeMirror 6 (history, search, lineNumbers, lineWrapping — no language support).
+- **Frontend:** TypeScript + Vite. Editor: CodeMirror 6 (history, lineNumbers, lineWrapping — no language support, no search).
 - **Chrome:** [`@krill-software/desktop-ui`](https://github.com/krill-software/desktop-ui) provides the titlebar, menu, status line, palette, and canonical action registry.
 - **State / fs / dev helpers:** [`krill-desktop-core`](https://github.com/krill-software/desktop-core).
 
@@ -57,7 +57,6 @@ Canonical actions only; bindings come from `@krill-software/desktop-ui`'s action
 | Quit        | `Ctrl+Q`       |
 | Undo / Redo | `Ctrl+Z` / `Ctrl+Shift+Z` |
 | Select All  | `Ctrl+A`       |
-| Find        | `Ctrl+F` (CodeMirror's search panel) |
 
 Custom menu (View): increase / decrease / reset font size.
 
@@ -79,4 +78,4 @@ Custom menu (View): increase / decrease / reset font size.
 ## Milestones
 
 1. **M1 — Editor works.** Tauri app launches, opens a file via CLI, edits, saves. Bundled Hasklig, soft-wrapped column, line numbers, status word/line counts. Done.
-2. **M2 — Polish.** External-change detection, find-and-replace, line endings indicator if it ever matters.
+2. **M2 — Polish.** External-change detection, line endings indicator if it ever matters.

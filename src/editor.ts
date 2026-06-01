@@ -1,5 +1,4 @@
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
-import { search, searchKeymap } from "@codemirror/search";
 import { EditorState } from "@codemirror/state";
 import { EditorView, drawSelection, highlightActiveLineGutter, keymap, lineNumbers } from "@codemirror/view";
 
@@ -22,10 +21,9 @@ export function createEditor(
       drawSelection(),
       lineNumbers(),
       highlightActiveLineGutter(),
-      search({ top: true }),
       EditorView.lineWrapping,
       EditorState.tabSize.of(2),
-      keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap]),
+      keymap.of([...defaultKeymap, ...historyKeymap]),
       EditorView.updateListener.of((u) => {
         if (u.docChanged) onChange(u.state.doc.toString());
         if (onCursor && (u.docChanged || u.selectionSet)) {

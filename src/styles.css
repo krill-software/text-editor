@@ -111,11 +111,7 @@ body {
   background: transparent;
 }
 
-#status-line {
-  font-family: var(--fm-mono);
-  font-size: 12px;
-  letter-spacing: 0.01em;
-}
+/* font-family + font-size are provided by desktop-ui's status-line.css. */
 
 #status-words {
   font-variant-numeric: tabular-nums;
