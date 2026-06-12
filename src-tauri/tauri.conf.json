@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "Text Editor",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "identifier": "software.krill.text-editor",
   "build": {
     "beforeDevCommand": "pnpm dev",
