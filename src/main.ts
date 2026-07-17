@@ -239,8 +239,8 @@ function initChrome() {
 
   // Setup text search box.
   const search = buildTextSearch({
-    onChange: (_value: string) => {
-      // Search logic will be connected here.
+    onChange: (value: string) => {
+      editor.setSearchQuery(value);
     },
     onClose: () => {
       editor.view.focus();
