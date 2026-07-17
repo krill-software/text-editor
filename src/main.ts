@@ -1,7 +1,7 @@
 import "@krill-software/desktop-ui/styles";
 import "./styles.css";
 
-import { mountChrome, showBootError } from "@krill-software/desktop-ui";
+import { mountChrome, showBootError, buildTextSearch } from "@krill-software/desktop-ui";
 
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow, LogicalSize, LogicalPosition } from "@tauri-apps/api/window";
@@ -235,6 +235,26 @@ function initChrome() {
   // Build the actual editor inside #editor-root.
   editor = createEditor(editorRoot, "", onDocChange, (line, col) => {
     metaSpan.textContent = `Ln ${line} · Col ${col} · UTF-8`;
+  });
+
+  // Setup text search box.
+  const search = buildTextSearch({
+    onChange: (_value: string) => {
+      // Search logic will be connected here.
+    },
+    onClose: () => {
+      editor.view.focus();
+    },
+  });
+  search.element.style.position = "absolute";
+  editorRoot.appendChild(search.element);
+
+  // Ctrl+F to toggle search.
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "f") {
+      e.preventDefault();
+      search.open();
+    }
   });
 }
 
