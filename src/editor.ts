@@ -1,7 +1,45 @@
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
-import { EditorState } from "@codemirror/state";
-import { EditorView, drawSelection, highlightActiveLineGutter, keymap, lineNumbers } from "@codemirror/view";
-import { search, setSearchQuery, SearchQuery } from "@codemirror/search";
+import { EditorState, StateField, StateEffect } from "@codemirror/state";
+import { EditorView, drawSelection, highlightActiveLineGutter, keymap, lineNumbers, Decoration } from "@codemirror/view";
+import { search } from "@codemirror/search";
+
+const setCustomSearch = StateEffect.define<string>();
+
+const customSearchField = StateField.define<string>({
+  create: () => "",
+  update(value, tr) {
+    for (const effect of tr.effects) {
+      if (effect.is(setCustomSearch)) return effect.value;
+    }
+    return value;
+  },
+  provide: (field) =>
+    EditorView.decorations.compute([field], (state) => {
+      const query = state.field(field);
+      if (!query) return Decoration.none;
+
+      const deco: Array<{ from: number; to: number; class: string }> = [];
+      const doc = state.doc.toString();
+
+      try {
+        const regex = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+        let match;
+        while ((match = regex.exec(doc)) !== null) {
+          deco.push({
+            from: match.index,
+            to: match.index + match[0].length,
+            class: "cm-search-match",
+          });
+        }
+      } catch {
+        /* invalid regex, ignore */
+      }
+
+      return Decoration.set(
+        deco.map((d) => Decoration.mark({ class: d.class }).range(d.from, d.to))
+      );
+    }),
+});
 
 export interface EditorHandle {
   view: EditorView;
@@ -27,6 +65,7 @@ export function createEditor(
       EditorState.tabSize.of(2),
       keymap.of([...defaultKeymap, ...historyKeymap]),
       search(),
+      customSearchField,
       EditorView.updateListener.of((u) => {
         if (u.docChanged) onChange(u.state.doc.toString());
         if (onCursor && (u.docChanged || u.selectionSet)) {
@@ -49,8 +88,7 @@ export function createEditor(
       });
     },
     setSearchQuery: (query: string) => {
-      const searchQuery = new SearchQuery({ search: query });
-      view.dispatch({ effects: setSearchQuery.of(searchQuery) });
+      view.dispatch({ effects: setCustomSearch.of(query) });
     },
   };
 }

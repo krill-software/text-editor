@@ -124,3 +124,8 @@ body {
 
 /* Traffic-light titlebar now lives in @krill-software/desktop-ui
  * v0.7.0+ — no local overrides needed. */
+
+.cm-search-match {
+  background-color: rgba(221, 117, 150, 0.3);
+  outline: 1px solid var(--fm-accent);
+}
